@@ -1,0 +1,37 @@
+%{
+    #include <iostream>
+    extern int yylex();
+    extern int yyparse ();
+    extern FILE* yyin;
+    extern unsigned linenum;
+    void        yyerror(const char* s);
+%}
+
+
+%code requires {
+}
+
+//%parse-param { }
+//%parse-param { }
+//%parse-param { }
+
+%union {
+    char*       data;
+}
+
+%token <data> INT ADD M_MULT MULT VAR_NAME FUNC_NAME MATRIX ASSIGN EVAL SUB
+//%token 
+
+//%type <>
+
+//%left
+
+%%
+start:
+    INT ADD INT { std::cout << "TA DA" << std::endl; }
+%%
+
+void        yyerror(const char* s) {
+    std::cerr << s << std::endl;
+}
+
