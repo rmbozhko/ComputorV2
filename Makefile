@@ -22,7 +22,7 @@ src/%.o : %.cpp $(HEADERS)
 
 clean:
 	@rm -f $(OBJ)
-	@rm -f lex.cpp
+	@rm -f src/lex.cpp
 	@rm -f src/parser.cpp
 	@rm -f headers/parser.hpp
 

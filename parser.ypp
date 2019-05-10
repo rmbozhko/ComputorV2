@@ -12,26 +12,30 @@
 }
 
 //%parse-param { }
-//%parse-param { }
-//%parse-param { }
 
 %union {
-    char*       data;
+    char*      data;
 }
 
-%token <data> INT ADD M_MULT MULT VAR_NAME FUNC_NAME MATRIX ASSIGN EVAL SUB
-//%token 
+%token M_MULT MULT ASSIGN EVAL DIV MOD 
+%token <data> NUMBER VAR_NAME FUNC_NAME MATRIX
+%token ENDL LPAREN RPAREN
 
 //%type <>
 
-//%left
+%left ADD SUB
 
 %%
 start:
-    INT ADD INT { std::cout << "TA DA" << std::endl; }
+    number ADD number { std::cout << "TA DA" << std::endl; }
+    | number SUB number { std::cout << "TA DA" << std::endl; }
+    | number number { std::cout << "Signed number case" << std::endl; } //12-2, 12+2
+
+number:
+    NUMBER
 %%
 
 void        yyerror(const char* s) {
-    std::cerr << s << std::endl;
+    std::cerr << "Error caught: " << s << std::endl;
 }
 
