@@ -3,7 +3,7 @@ CC = g++
 SRC = src/parser.cpp src/lex.cpp main.cpp
 OBJ = $(SRC:.cpp=.o)
 CFLAGS = -c -O0 -std=c++11 #-Wall -Wextra -Werror
-HEADERS = headers/parser.hpp
+HEADERS = headers/parser.hpp headers/main.hpp
 
 all: $(NAME)
 
@@ -13,7 +13,7 @@ PARSER:
 	@flex -l -i --outfile=src/lex.cpp lexer.lex
 
 $(NAME) : PARSER $(OBJ) $(HEADERS)
-	@$(CC) $(OBJ) -lfl $(HEADERS) -o $(NAME)
+	@$(CC) $(OBJ) -lfl -lreadline $(HEADERS) -o $(NAME)
 	@echo "\033[0;36m$(NAME) is compiled\033[0m"
 
 

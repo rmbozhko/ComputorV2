@@ -1,20 +1,22 @@
-#include <iostream>
-#include "headers/parser.hpp"
-#include <string>
-
-void    scan_string(const char* str);
-void    clear_buffer(void);
+#include "headers/main.hpp"
 
 int     main(const int argc, const char* argv[])
 {
     if (argc == 1) {
-        std::string         str;
-        int                 res;
+        
+        char*       str;
+        int         res;
 
-        while (std::getline(std::cin, str)) {
-            scan_string(str.c_str());
-            res = yyparse();
-            clear_buffer();
+        while ((str = readline("> ")) != nullptr)
+        {
+            if (*str)
+            {
+                scan_string(str);
+                res = yyparse();
+                clear_buffer();
+                add_history(str);
+            }
+            free(str);
         }
         return (0);
     }
