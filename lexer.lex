@@ -5,18 +5,24 @@
     int yyparse ();
     unsigned 	linenum = 0;
     //.90, 12. aren't allowed
+    //NUMBER          ([-+]?[0-9]+|([-+]?[0-9]+\.[0-9]+))
+    //#.*              		    
+    //COMPLEX_NUM     "(?=[iI.\d+-])([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?![iI.\d]))?([+-]?(?:(?:\d+(?:\.\d*)?|\.\d+))?[iI])?"
 %}
 
 FLOAT_NUM       [-+]?([0-9]+\.[0-9]+|[0-9]+)
 INT_NUM         [-+]?[0-9]+
-COMPLEX_NUM     (?=[iI.\d+-])([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?![iI.\d]))?([+-]?(?:(?:\d+(?:\.\d*)?|\.\d+))?[iI])?
+COMPLEX_NUM     [+-]?[iI]
 CHAR            [^iI][a-zA-Z]
-NUMBER          ([-+]?[0-9]+|([-+]?[0-9]+\.[0-9]+))
 MATRIX          (\[+([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?,?)+[\]\,]+)+
 
-
 %%
-[ \t]+         
+[\s]+         
+"[["{MATRIX}"]]" { yylval.data = strdup(yytext); return MATRIX; }
+{COMPLEX_NUM}   { yylval.data = strdup(yytext); return COMPLEX_NUM; }
+{FLOAT_NUM}     { yylval.data = strdup(yytext); return FLOAT_NUM; }
+{INT_NUM}       { yylval.data = strdup(yytext); return INT_NUM; }
+{CHAR}+         { printf("LOLA"); yylval.data = strdup(yytext); return VAR_NAME; }
 "+"             { return ADD; }
 "-"             { return SUB; }
 "/"             { return DIV; }
@@ -25,12 +31,8 @@ MATRIX          (\[+([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?,?)+[\]\,]+)+
 "*"				{ return MULT; }
 "=?"            { return EVAL; }
 "="             { return ASSIGN; }
-"[["{MATRIX}"]]"  { yylval.data = strdup(yytext); return MATRIX; }
-{CHAR}+"("{CHAR}+")"  {yylval.data = strdup(yytext); return FUNC_NAME; }
-{CHAR}+         {yylval.data = strdup(yytext); return VAR_NAME; }
-{NUMBER}        { yylval.data = strdup(yytext); return NUMBER; }
-[\n]+           
-#.*             { printf("LOL\n"); } 		    
+"("             { return LPAREN;}
+")"             { return RPAREN;}
 %%
 
 void    scan_string(const char* str) {

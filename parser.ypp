@@ -18,21 +18,26 @@
 }
 
 %token M_MULT MULT ASSIGN EVAL DIV MOD 
-%token <data> NUMBER VAR_NAME FUNC_NAME MATRIX
-%token ENDL LPAREN RPAREN
+%token <data> VAR_NAME FUNC_NAME MATRIX INT_NUM FLOAT_NUM COMPLEX_NUM
+%token LPAREN RPAREN
 
 //%type <>
 
 %left ADD SUB
+%left MULT DIV
 
 %%
 start:
-    number ADD number { std::cout << "TA DA" << std::endl; }
-    | number SUB number { std::cout << "TA DA" << std::endl; }
-    | number number { std::cout << "Signed number case" << std::endl; } //12-2, 12+2
+    number ADD number { std::cout << "ADD" << std::endl; }
+    | number SUB number { std::cout << "SUB" << std::endl; }
+    | number MULT number { std::cout << "MULT" << std::endl; }
+    | number DIV number { std::cout << "DIV" << std::endl; }
+    | number number { std::cout << "Signed number case" << std::endl; } //12-2, 12+2 -> handle as NUMBER + NUMBER
 
 number:
-    NUMBER
+    INT_NUM
+    | FLOAT_NUM
+    | COMPLEX_NUM
 %%
 
 void        yyerror(const char* s) {
